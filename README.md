@@ -11,12 +11,12 @@
 | 4 | `>` `>>` `<` `\|` | `tokenize()` / `parse()` / `run_pipeline()` |
 | 5 | 명령어 분담 구현 | 아래 표 |
 
-## 명령어 분담 (11개를 4 / 4 / 3 개로)
+## 명령어 분담 (11개를 3 / 4 / 4 개로)
 | 담당 | 명령어 | 위치 |
 |---|---|---|
-| 박재석 | `ls`, `pwd`, `cd`, `mkdir` (+ 쉘 뼈대) | `cmds/cmd_ls.c` `cmd_pwd.c` `cmd_cd.c` `cmd_mkdir.c` |
-| 임채민 | `rmdir`, `ln`, `cp`, `rm` | `cmds/cmd_xxx.c` (아직 시스템 명령어 사용) |
-| 김시현 | `mv`, `cat`, `grep` | `cmds/cmd_xxx.c` (아직 시스템 명령어 사용) |
+| 임채민 | `cat`, `grep`, `pwd` | `cmds/cmd_pwd.c` (작성됨), `cmd_cat.c` `cmd_grep.c` (아직 시스템 명령어 사용) |
+| 박재석 | `ls`, `mkdir`, `rmdir`, `rm` | `cmds/cmd_ls.c` `cmd_mkdir.c` (작성됨), `cmd_rmdir.c` `cmd_rm.c` (아직 시스템 명령어 사용) |
+| 김시현 | `cd`, `cp`, `mv`, `ln` | `cmds/cmd_cd.c` (작성됨), `cmd_cp.c` `cmd_mv.c` `cmd_ln.c` (아직 시스템 명령어 사용) |
 
 ## 팀원이 명령어를 추가하는 방법
 1. `cmds/cmd_xxx.c` 에 `int cmd_xxx(int argc, char *argv[])` 를 만든다. (반환값은 종료 코드)
