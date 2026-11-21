@@ -32,6 +32,9 @@ static struct builtin builtins[] = {
     { "pwd",   cmd_pwd,   0 },
     { "mkdir", cmd_mkdir, 0 },
     { "cd",    cmd_cd,    1 },
+    { "cp",    cmd_cp,    0 },
+    { "mv",    cmd_mv,    0 },
+    { "ln",    cmd_ln,    0 },
     { "jobs",  do_jobs,   1 },
     { "fg",    do_fg,     1 },
     { "bg",    do_bg,     1 },
@@ -376,6 +379,32 @@ static void child_setup_redirect(Cmd *c)
     }
 }
 
+/* 쉘이 직접 실행하는 명령(cd 등)의 < > >> 처리.
+ * 표준 입출력은 바꾸지 않고, 입력 파일이 열리는지 확인한 뒤 닫는다.
+ * 출력 파일은 열어서 만들거나(>> 는 이어쓰기) 비운 뒤 닫는다.
+ * 하나라도 실패하면 오류를 출력하고 -1 을 돌려주어 명령을 실행하지 않는다. */
+static int check_parent_redirect(Cmd *c)
+{
+    int fd;
+    if (c->infile) {
+        fd = open(c->infile, O_RDONLY);
+        if (fd < 0) {
+            fprintf(stderr, "myshell: %s: %s\n", c->infile, strerror(errno));
+            return -1;
+        }
+        close(fd);
+    }
+    if (c->outfile) {
+        fd = open(c->outfile, O_WRONLY | O_CREAT | (c->append ? O_APPEND : O_TRUNC), 0644);
+        if (fd < 0) {
+            fprintf(stderr, "myshell: %s: %s\n", c->outfile, strerror(errno));
+            return -1;
+        }
+        close(fd);
+    }
+    return 0;
+}
+
 static void run_pipeline(Pipeline *pl, const char *text)
 {
     int i, prev = -1, fd[2];
@@ -387,6 +416,8 @@ static void run_pipeline(Pipeline *pl, const char *text)
     if (pl->ncmds == 1) {
         b = find_builtin(pl->cmds[0].argv[0]);
         if (b != NULL && b->in_parent) {
+            if (check_parent_redirect(&pl->cmds[0]) < 0)
+                return;
             b->fn(pl->cmds[0].argc, pl->cmds[0].argv);
             return;
         }

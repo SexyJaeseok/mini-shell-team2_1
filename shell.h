@@ -33,5 +33,11 @@ int cmd_ls(int argc, char *argv[]);
 int cmd_pwd(int argc, char *argv[]);
 int cmd_cd(int argc, char *argv[]);
 int cmd_mkdir(int argc, char *argv[]);
+int cmd_cp(int argc, char *argv[]);
+int cmd_mv(int argc, char *argv[]);
+int cmd_ln(int argc, char *argv[]);
+
+/* cp 와 mv 가 공유하는 내부 함수 (cmds/cmd_cp.c) */
+int run_transfer(char *argv[], int move);
 
 #endif
