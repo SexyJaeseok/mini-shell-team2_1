@@ -14,7 +14,7 @@
 ## 명령어 분담 (11개를 3 / 4 / 4 개로)
 | 담당 | 명령어 | 위치 |
 |---|---|---|
-| 임채민 | `cat`, `grep`, `pwd` | `cmds/cmd_pwd.c` (작성됨), `cmd_cat.c` `cmd_grep.c` (아직 시스템 명령어 사용) |
+| 임채민 | `cat`, `grep`, `pwd` | `cmds/cmd_cat.c`, `cmds/cmd_grep.c`, `cmds/cmd_pwd.c` |
 | 박재석 | `ls`, `mkdir`, `rmdir`, `rm` | `cmds/cmd_ls.c` `cmd_mkdir.c` (작성됨), `cmd_rmdir.c` `cmd_rm.c` (아직 시스템 명령어 사용) |
 | 김시현 | `cd`, `cp`, `mv`, `ln` | `cmds/cmd_cd.c` (작성됨), `cmd_cp.c` `cmd_mv.c` `cmd_ln.c` (아직 시스템 명령어 사용) |
 
