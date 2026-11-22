@@ -504,8 +504,16 @@ int main(void)
             break;
         }
         len = strlen(line);
-        if (len > 0 && line[len - 1] == '\n')
+        if (len > 0 && line[len - 1] == '\n') {
             line[--len] = '\0';
+        } else if (len == sizeof(line) - 1) {
+            /* 한 줄이 버퍼보다 길면 나머지를 버린다. 남겨 두면 다음 명령으로 읽힌다. */
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF)
+                ;
+            fprintf(stderr, "myshell: 입력이 너무 깁니다\n");
+            continue;
+        }
         snprintf(copy, sizeof(copy), "%s", line);
 
         if (parse(line, tokbuf, &pl) <= 0)
