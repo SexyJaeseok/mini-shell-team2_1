@@ -30,6 +30,8 @@ typedef int (*cmd_fn)(int argc, char *argv[]);
  * shell.c 의 builtins[] 표에 이름과 함수를 추가하면 된다.
  * 표에 없는 명령어는 execvp() 로 시스템 명령어를 실행한다. */
 int cmd_ls(int argc, char *argv[]);
+int cmd_cat(int argc, char *argv[]);
+int cmd_grep(int argc, char *argv[]);
 int cmd_pwd(int argc, char *argv[]);
 int cmd_cd(int argc, char *argv[]);
 int cmd_mkdir(int argc, char *argv[]);

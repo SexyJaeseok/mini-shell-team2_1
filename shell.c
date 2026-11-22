@@ -29,6 +29,8 @@ struct builtin {
 
 static struct builtin builtins[] = {
     { "ls",    cmd_ls,    0 },
+    { "cat",   cmd_cat,   0 },
+    { "grep",  cmd_grep,  0 },
     { "pwd",   cmd_pwd,   0 },
     { "mkdir", cmd_mkdir, 0 },
     { "cd",    cmd_cd,    1 },
@@ -471,6 +473,8 @@ int main(void)
     Pipeline pl;
     size_t len;
 
+    /* 자식의 cat과 grep이 다음 셸 명령을 입력으로 물려받지 않게 한다. */
+    setvbuf(stdin, NULL, _IONBF, 0);
     interactive = isatty(STDIN_FILENO);
     if (interactive) {
         /* 쉘 자신은 Ctrl-C, Ctrl-\, Ctrl-Z 로 죽거나 멈추지 않게 한다 */
