@@ -34,6 +34,8 @@ int cmd_cat(int argc, char *argv[]);
 int cmd_grep(int argc, char *argv[]);
 int cmd_pwd(int argc, char *argv[]);
 int cmd_cd(int argc, char *argv[]);
+int cmd_rmdir(int argc, char *argv[]);
+int cmd_rm(int argc, char *argv[]);
 int cmd_mkdir(int argc, char *argv[]);
 
 #endif
