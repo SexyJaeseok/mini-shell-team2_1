@@ -16,7 +16,7 @@
 |---|---|---|
 | 임채민 | `cat`, `grep`, `pwd` | `cmds/cmd_cat.c`, `cmds/cmd_grep.c`, `cmds/cmd_pwd.c` |
 | 박재석 | `ls`, `mkdir`, `rmdir`, `rm` | `cmds/cmd_ls.c` `cmd_mkdir.c` (작성됨), `cmd_rmdir.c` `cmd_rm.c` (아직 시스템 명령어 사용) |
-| 김시현 | `cd`, `cp`, `mv`, `ln` | `cmds/cmd_cd.c` (작성됨), `cmd_cp.c` `cmd_mv.c` `cmd_ln.c` (아직 시스템 명령어 사용) |
+| 김시현 | `cd`, `cp`, `mv`, `ln` | `cmds/cmd_cd.c`, `cmds/cmd_cp.c`, `cmds/cmd_mv.c`, `cmds/cmd_ln.c` |
 
 ## 팀원이 명령어를 추가하는 방법
 1. `cmds/cmd_xxx.c` 에 `int cmd_xxx(int argc, char *argv[])` 를 만든다. (반환값은 종료 코드)
