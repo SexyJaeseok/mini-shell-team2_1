@@ -245,7 +245,8 @@ static int do_bg(int argc, char *argv[])
 
 /* ---------- 입력 해석 ---------- */
 /* line 을 토큰으로 나누어 buf 에 복사한다. 따옴표("", '')는 묶어서 한 토큰으로 보고,
- * 따옴표 밖의 | < > >> & 는 연산자 토큰으로 분리한다. (tok 은 buf 안을 가리킨다) */
+ * 따옴표 밖의 | < > >> & 는 연산자 토큰으로 분리한다. (tok 은 buf 안을 가리킨다)
+ * 닫히지 않은 따옴표가 있으면 -2, 토큰이 너무 많으면 -1 을 돌려준다. */
 static int tokenize(const char *line, char *buf, char **tok, int *isop, int max)
 {
     const char *p = line;
@@ -279,8 +280,9 @@ static int tokenize(const char *line, char *buf, char **tok, int *isop, int max)
                 char q = *p++;
                 while (*p && *p != q)
                     *out++ = *p++;
-                if (*p == q)
-                    p++;
+                if (*p != q)
+                    return -2;      /* 닫는 따옴표가 없다 */
+                p++;
             } else {
                 *out++ = *p++;
             }
@@ -301,6 +303,10 @@ static int parse(const char *line, char *buf, Pipeline *pl)
 
     memset(pl, 0, sizeof(*pl));
     n = tokenize(line, buf, tok, isop, MAXARGS * 2);
+    if (n == -2) {
+        fprintf(stderr, "myshell: 따옴표가 닫히지 않았습니다\n");
+        return -1;
+    }
     if (n < 0) {
         fprintf(stderr, "myshell: 입력이 너무 깁니다\n");
         return -1;
