@@ -32,6 +32,8 @@ typedef int (*cmd_fn)(int argc, char *argv[]);
 int cmd_ls(int argc, char *argv[]);
 int cmd_pwd(int argc, char *argv[]);
 int cmd_cd(int argc, char *argv[]);
+int cmd_rmdir(int argc, char *argv[]);
+int cmd_rm(int argc, char *argv[]);
 int cmd_mkdir(int argc, char *argv[]);
 
 #endif

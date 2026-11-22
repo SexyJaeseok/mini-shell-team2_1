@@ -31,6 +31,8 @@ static struct builtin builtins[] = {
     { "ls",    cmd_ls,    0 },
     { "pwd",   cmd_pwd,   0 },
     { "mkdir", cmd_mkdir, 0 },
+    { "rmdir", cmd_rmdir, 0 },
+    { "rm",    cmd_rm,    0 },
     { "cd",    cmd_cd,    1 },
     { "jobs",  do_jobs,   1 },
     { "fg",    do_fg,     1 },
