@@ -40,8 +40,17 @@ int cmd_mkdir(int argc, char *argv[])
     for (i = 1; i < argc && argv[i][0] == '-' && argv[i][1] != '\0'; i++, first = i) {
         if (strcmp(argv[i], "-p") == 0) {
             parents = 1;
-        } else if (strcmp(argv[i], "-m") == 0 && i + 1 < argc) {
-            mode = (mode_t)strtol(argv[++i], NULL, 8);
+        } else if (strcmp(argv[i], "-m") == 0) {
+            char *end;
+            if (i + 1 >= argc) {
+                fprintf(stderr, "mkdir: -m 옵션에는 모드가 필요합니다\n");
+                return 1;
+            }
+            mode = (mode_t)strtol(argv[++i], &end, 8);
+            if (*argv[i] == '\0' || *end != '\0' || mode > 07777) {
+                fprintf(stderr, "mkdir: 잘못된 모드입니다: '%s'\n", argv[i]);
+                return 1;
+            }
         } else if (strcmp(argv[i], "--") == 0) {
             i++;
             break;

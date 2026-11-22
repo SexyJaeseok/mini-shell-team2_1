@@ -129,13 +129,17 @@ static int list_dir(const char *path)
 
 int cmd_ls(int argc, char *argv[])
 {
-    int i, j, nfiles = 0, status = 0;
+    int i, j, nfiles = 0, status = 0, ended = 0, printed = 0;
     char *files[256];
     struct stat st;
 
     opt_a = opt_l = 0;
     for (i = 1; i < argc; i++) {
-        if (argv[i][0] == '-' && argv[i][1] != '\0') {
+        if (!ended && strcmp(argv[i], "--") == 0) {
+            ended = 1;              /* -- 뒤에는 - 로 시작해도 경로로 본다 */
+            continue;
+        }
+        if (!ended && argv[i][0] == '-' && argv[i][1] != '\0') {
             for (j = 1; argv[i][j]; j++) {
                 if (argv[i][j] == 'a')
                     opt_a = 1;
@@ -153,26 +157,31 @@ int cmd_ls(int argc, char *argv[])
     if (nfiles == 0)
         return list_dir(".");
 
+    /* 파일은 먼저 출력하고, 디렉토리는 그 다음에 "이름:" 머리글과 함께 출력한다 */
     for (i = 0; i < nfiles; i++) {
         if (stat(files[i], &st) == -1) {
             fprintf(stderr, "ls: '%s'에 접근할 수 없습니다: %s\n", files[i], strerror(errno));
             status = 1;
             continue;
         }
-        if (nfiles > 1 || !S_ISDIR(st.st_mode)) {
-            if (S_ISDIR(st.st_mode)) {
-                if (i > 0)
-                    printf("\n");
-                printf("%s:\n", files[i]);
-            }
-        }
-        if (S_ISDIR(st.st_mode)) {
-            status |= list_dir(files[i]);
-        } else if (opt_l) {
+        if (S_ISDIR(st.st_mode))
+            continue;
+        if (opt_l)
             print_long(NULL, files[i]);
-        } else {
+        else
             printf("%s\n", files[i]);
+        printed = 1;
+    }
+    for (i = 0; i < nfiles; i++) {
+        if (stat(files[i], &st) == -1 || !S_ISDIR(st.st_mode))
+            continue;
+        if (nfiles > 1) {
+            if (printed)
+                printf("\n");
+            printf("%s:\n", files[i]);
         }
+        status |= list_dir(files[i]);
+        printed = 1;
     }
     return status;
 }
